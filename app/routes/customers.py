@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from app import db
 from app.models.customer import Customer
 from app.models.order import Order
+from app.forms.customer import CustomerForm
 
 customers_bp = Blueprint('customers', __name__, url_prefix='/customers')
 
@@ -85,3 +86,41 @@ def add_note(id):
         flash('Note cannot be empty', 'danger')
     
     return redirect(url_for('customers.detail', id=id))
+
+
+@customers_bp.route('/add', methods=['GET', 'POST'])
+@login_required
+def add():
+    """Add a new customer."""
+    form = CustomerForm()
+    if form.validate_on_submit():
+        customer = Customer()
+        form.populate_obj(customer)
+        db.session.add(customer)
+        db.session.commit()
+        flash('Customer added successfully', 'success')
+        return redirect(url_for('customers.detail', id=customer.id))
+    return render_template('customers/form.html', form=form, title='Add Customer')
+
+@customers_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit(id):
+    """Edit a customer."""
+    customer = Customer.query.get_or_404(id)
+    form = CustomerForm(obj=customer)
+    if form.validate_on_submit():
+        form.populate_obj(customer)
+        db.session.commit()
+        flash('Customer updated successfully', 'success')
+        return redirect(url_for('customers.detail', id=id))
+    return render_template('customers/form.html', form=form, customer=customer, title='Edit Customer')
+
+@customers_bp.route('/<int:id>/delete', methods=['POST'])
+@login_required
+def delete(id):
+    """Delete a customer."""
+    customer = Customer.query.get_or_404(id)
+    db.session.delete(customer)
+    db.session.commit()
+    flash('Customer deleted successfully', 'success')
+    return redirect(url_for('customers.list'))

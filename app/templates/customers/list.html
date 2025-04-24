@@ -19,7 +19,9 @@
             </div>
             
             <div class="col-md-4 text-end">
-                <span>Total: <strong>{{ customers.total }}</strong> customers</span>
+                <a href="{{ url_for('customers.add') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Add Customer
+                </a>
             </div>
         </form>
     </div>
@@ -66,9 +68,23 @@
                             <td>{{ customer.get_total_orders() }}</td>
                             <td>₹{{ customer.get_total_spent()|round(2) }}</td>
                             <td>
-                                <a href="{{ url_for('customers.detail', id=customer.id) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="View Detail">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('customers.detail', id=customer.id) }}" class="btn btn-sm btn-outline-primary" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ url_for('customers.edit', id=customer.id) }}" class="btn btn-sm btn-outline-secondary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" 
+                                            onclick="if(confirm('Are you sure you want to delete this customer?')) { 
+                                                document.getElementById('delete-form-{{ customer.id }}').submit(); 
+                                            }">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                <form id="delete-form-{{ customer.id }}" action="{{ url_for('customers.delete', id=customer.id) }}" method="POST" style="display: none;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
