@@ -144,3 +144,30 @@ def generate_order_number():
     timestamp = datetime.utcnow().strftime('%Y%m%d%H%M')
     random_digits = str(random.randint(1000, 9999))
     return f"ORD-{timestamp}-{random_digits}"
+def format_currency(amount):
+    """Format amount as currency."""
+    return f"₹{amount:,.2f}"
+
+def calculate_order_summary(orders):
+    """Calculate summary statistics for orders."""
+    total_orders = len(orders)
+    total_revenue = sum(order.total_amount for order in orders if order.payment_status == 'paid')
+    pending_orders = sum(1 for order in orders if order.status in ['new', 'processing'])
+    
+    return {
+        'total_orders': total_orders,
+        'total_revenue': total_revenue,
+        'pending_orders': pending_orders
+    }
+
+def get_customer_statistics(customer):
+    """Get statistics for a customer."""
+    total_orders = customer.orders.count()
+    total_spent = customer.get_total_spent()
+    average_order_value = total_spent / total_orders if total_orders > 0 else 0
+    
+    return {
+        'total_orders': total_orders,
+        'total_spent': total_spent,
+        'average_order_value': average_order_value
+    }

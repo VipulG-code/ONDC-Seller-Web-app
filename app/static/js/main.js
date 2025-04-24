@@ -215,6 +215,53 @@ const initProductVariants = () => {
 };
 
 // Order status update confirmation
+// Product and Category Management
+const initProductManagement = () => {
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        productForm.addEventListener('submit', function(e) {
+            const requiredFields = productForm.querySelectorAll('[required]');
+            let valid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    valid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!valid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+    }
+};
+
+const initImagePreview = () => {
+    const imageInput = document.getElementById('images');
+    const previewContainer = document.getElementById('imagePreview');
+    
+    if (imageInput && previewContainer) {
+        imageInput.addEventListener('change', function() {
+            previewContainer.innerHTML = '';
+            
+            [...this.files].forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.createElement('img');
+                    preview.src = e.target.result;
+                    preview.className = 'product-image-preview';
+                    previewContainer.appendChild(preview);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    }
+};
+
 const initOrderStatusUpdate = () => {
   const statusButtons = document.querySelectorAll('.update-status-btn');
   
