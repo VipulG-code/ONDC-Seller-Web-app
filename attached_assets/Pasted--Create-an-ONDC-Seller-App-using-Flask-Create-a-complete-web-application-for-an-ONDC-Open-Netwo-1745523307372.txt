@@ -1,0 +1,330 @@
+# Create an ONDC Seller App using Flask
+
+Create a complete web application for an ONDC (Open Network for Digital Commerce) Seller App with Flask backend and modern frontend. The application should help sellers manage their business on the ONDC network.
+
+## Project Structure
+
+Create a Flask application with the following structure:
+- `/app` - Main application directory
+  - `/static` - Static files (CSS, JS, images)
+  - `/templates` - HTML templates
+  - `/models` - Database models
+  - `/routes` - Route handlers
+  - `/services` - Business logic services
+  - `/utils` - Utility functions
+  - `/api` - API endpoints
+- `app.py` - Main application entry point
+- `config.py` - Configuration settings
+- `requirements.txt` - Dependencies
+- `README.md` - Project documentation
+
+## Technology Requirements
+
+### Backend
+- Flask framework
+- Flask-SQLAlchemy for database ORM
+- Flask-Migrate for database migrations
+- Flask-Login for authentication
+- Flask-RESTful for API endpoints
+- Flask-WTF for form handling
+- SQLite for development, PostgreSQL for production
+- Flask-CORS for handling cross-origin requests
+
+### Frontend
+- HTML, CSS, JavaScript
+- Bootstrap 5 for responsive design
+- jQuery for DOM manipulation
+- Chart.js for analytics
+- AJAX for asynchronous requests
+- Form validation with JavaScript
+
+## Core Features to Implement
+
+### Authentication System
+- Login page with email/password authentication
+- User registration for sellers
+- Password reset functionality
+- JWT token-based authentication for API
+- Role-based access control (admin, seller, staff)
+
+### Dashboard/Homepage
+- Sales summary with charts
+- Recent orders display
+- Low stock alerts
+- Quick action buttons
+- Performance metrics
+
+### Product Management
+- Product listing page with search and filters
+- Add/edit product form with image upload
+- Product categories management
+- Inventory management with stock tracking
+- Bulk operations for products
+
+### Order Management
+- Orders list with status filtering
+- Order detail page showing all information
+- Order status update workflow
+- Invoice generation (PDF)
+- Order cancellation and refund handling
+
+### Customer Management
+- Customer directory
+- Customer profile with order history
+- Communication history tracking
+- Support ticket system
+
+### Shipping and Logistics
+- Shipping provider configuration
+- Shipping rate calculation based on zones
+- Tracking information management
+- Shipping label generation
+
+### Marketing Tools
+- Promotion creation (discounts, offers)
+- Coupon code generation
+- Campaign tracking
+- Customer segmentation
+
+### Notifications System
+- In-app notifications
+- Email notifications
+- Notification preferences settings
+
+### Multi-language Support
+- Language selection interface
+- Localization for major Indian languages
+- Region-specific formatting for dates, currency
+
+### Settings and Configuration
+- Business profile settings
+- Payment method configuration
+- Tax settings
+- API integration settings
+- ONDC-specific configuration
+
+## Database Models
+
+Create the following database models:
+
+1. `User` - For seller accounts and staff
+2. `Product` - Product information
+3. `ProductVariant` - Product variations (size, color, etc.)
+4. `ProductImage` - Multiple images per product
+5. `Category` - Product categories
+6. `Order` - Order information
+7. `OrderItem` - Individual items in orders
+8. `Customer` - Customer information
+9. `ShippingMethod` - Available shipping methods
+10. `ShippingZone` - Delivery zones with rates
+11. `Promotion` - Marketing promotions and discounts
+12. `Notification` - System notifications
+13. `Setting` - System and user settings
+
+## Page-by-Page Implementation
+
+### Login Page
+- Clean login form with email and password fields
+- "Remember me" checkbox
+- Forgot password link
+- Registration link for new sellers
+- Form validation with error messages
+- Redirect to dashboard on successful login
+
+### Registration Page
+- Business name, owner name fields
+- Email, phone, password fields
+- Business category selection
+- Terms and conditions checkbox
+- Validation for required fields
+- Email verification process
+
+### Dashboard
+- Top navigation with notifications and user menu
+- Sidebar with main navigation
+- Sales summary charts (daily, weekly, monthly)
+- Recent orders table (limit 5)
+- Low stock products table
+- Quick action buttons (add product, view orders)
+
+### Product List Page
+- Table with columns: image, name, SKU, price, stock, status
+- Search box for filtering by name/SKU
+- Category filter dropdown
+- Add new product button
+- Bulk action checkboxes
+- Pagination control
+- Sort functionality
+
+### Add/Edit Product Page
+- Multi-section form with tabs:
+  - Basic info (name, SKU, description)
+  - Pricing (MRP, selling price, tax)
+  - Inventory (stock quantity, low stock threshold)
+  - Images (multiple upload with preview)
+  - Variants (add color, size variations)
+  - Shipping (weight, dimensions)
+  - ONDC-specific attributes
+- Save as draft and publish buttons
+- Image upload with drag-drop support
+- Rich text editor for description
+
+### Orders List Page
+- Table with columns: order ID, customer, date, amount, status
+- Status filter tabs (new, processing, shipped, delivered, cancelled)
+- Date range filter
+- Search by order ID or customer
+- Bulk action tools
+- Pagination control
+
+### Order Detail Page
+- Order summary section
+- Customer information section
+- Order items table
+- Payment information
+- Shipping details with tracking
+- Status update buttons
+- Order timeline/history
+- Notes section
+- Print invoice button
+
+### Customer List Page
+- Table with columns: name, email, phone, orders, total spent
+- Search and filter options
+- Add new customer button
+- View customer details button
+- Pagination control
+
+### Settings Pages
+- Business profile settings form
+- Payment methods configuration
+- Shipping settings
+- Tax configuration
+- Notification preferences
+- User management
+- API integration settings
+- ONDC configuration
+
+## API Endpoints
+
+Implement RESTful API endpoints for:
+
+### Authentication
+- POST /api/auth/login
+- POST /api/auth/register
+- POST /api/auth/forgot-password
+- POST /api/auth/reset-password
+
+### Products
+- GET /api/products
+- POST /api/products
+- GET /api/products/<id>
+- PUT /api/products/<id>
+- DELETE /api/products/<id>
+- POST /api/products/bulk-update
+
+### Orders
+- GET /api/orders
+- GET /api/orders/<id>
+- PUT /api/orders/<id>/status
+- POST /api/orders/<id>/notes
+- POST /api/orders/<id>/cancel
+
+### Customers
+- GET /api/customers
+- GET /api/customers/<id>
+- PUT /api/customers/<id>
+- GET /api/customers/<id>/orders
+
+### Shipping
+- GET /api/shipping/methods
+- POST /api/shipping/methods
+- GET /api/shipping/zones
+- POST /api/shipping/calculate
+
+### Promotions
+- GET /api/promotions
+- POST /api/promotions
+- PUT /api/promotions/<id>
+- DELETE /api/promotions/<id>
+
+### Notifications
+- GET /api/notifications
+- PUT /api/notifications/<id>/read
+- GET /api/notifications/settings
+- PUT /api/notifications/settings
+
+## User Interactions
+
+### Product Addition Flow
+1. User clicks "Add Product" button
+2. Form loads with Basic Info tab active
+3. User fills out required fields (name, price, etc.)
+4. User uploads product images
+5. User adds variants if needed
+6. User sets inventory levels
+7. User clicks "Save" to create product
+8. System validates input, saves product
+9. Success message displayed, return to product list
+
+### Order Processing Flow
+1. New order notification appears
+2. User clicks notification to view order
+3. Order details page loads
+4. User reviews order and clicks "Accept"
+5. System updates order status to "Processing"
+6. User prepares order and clicks "Ready to Ship"
+7. Shipping label generation dialog appears
+8. User selects shipping method, prints label
+9. User marks order as "Shipped" and enters tracking
+10. Customer receives shipping notification
+
+### Customer Profile Viewing
+1. User clicks on customer name in orders list
+2. Customer profile page loads
+3. User views order history tab
+4. User can add notes about customer
+5. User can view support tickets from customer
+6. User can initiate communication with customer
+
+## UI Design Guidelines
+
+- Use Bootstrap 5 components and grid system
+- Primary color: #3B82F6 (blue)
+- Secondary color: #10B981 (green)
+- Accent color: #F59E0B (amber)
+- Error color: #EF4444 (red)
+- Font: System font stack or Google Fonts (Open Sans)
+- Icons: Bootstrap Icons or Font Awesome
+- Card-based layout for dashboard widgets
+- Responsive design for all screen sizes
+- Light/dark mode toggle (optional)
+
+## Testing Requirements
+
+- Unit tests for core functions
+- Integration tests for critical flows
+- Form validation testing
+- Database model tests
+- API endpoint tests
+
+## Security Considerations
+
+- Implement CSRF protection on all forms
+- Use Werkzeug's password hashing
+- Input sanitization
+- SQL injection protection
+- XSS protection
+- Rate limiting on authentication endpoints
+- Secure password policy enforcement
+- Session timeout and management
+
+## ONDC Integration
+
+- Implement basic ONDC protocol adapters
+- Support ONDC catalog format
+- Handle ONDC order states
+- Support ONDC logistics integration
+- Follow ONDC API specifications
+
+This project should be implemented in phases, starting with the core features (authentication, product management, order management) and then adding more advanced features.
