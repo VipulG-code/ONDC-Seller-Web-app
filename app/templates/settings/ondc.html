@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}ONDC Integration - ONDC Seller App{% endblock %}
+
+{% block page_title %}ONDC Integration{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Settings</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('settings.profile') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shop me-2"></i> Business Profile
+                    </a>
+                    <a href="{{ url_for('settings.security') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shield-lock me-2"></i> Security
+                    </a>
+                    <a href="{{ url_for('settings.shipping') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-truck me-2"></i> Shipping
+                    </a>
+                    <a href="{{ url_for('settings.ondc') }}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-hdd-network me-2"></i> ONDC Integration
+                    </a>
+                    <a href="{{ url_for('settings.notifications') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-bell me-2"></i> Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">ONDC Resources</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="https://ondc.org/" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-box-arrow-up-right me-2"></i> ONDC Official Website
+                    </a>
+                    <a href="https://ondc.org/protocol-specifications.php" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-file-earmark-text me-2"></i> Protocol Specifications
+                    </a>
+                    <a href="https://ondc.org/newsletter.php" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-envelope me-2"></i> ONDC Newsletter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">ONDC Configuration</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-4">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-info-circle-fill fs-4"></i>
+                        </div>
+                        <div>
+                            <h6>About ONDC Integration</h6>
+                            <p class="mb-0">Open Network for Digital Commerce (ONDC) is an initiative aimed at promoting open networks for exchange of goods and services over digital networks. Configure your ONDC seller parameters here to participate in the network.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="POST" action="{{ url_for('settings.ondc') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <h6 class="text-muted mb-3">ONDC Seller Identification</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="ondc_seller_id" class="form-label">ONDC Seller ID *</label>
+                            {{ form.ondc_seller_id(class="form-control" + (" is-invalid" if form.ondc_seller_id.errors else "")) }}
+                            {% if form.ondc_seller_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ondc_seller_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Your unique identifier in the ONDC network</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="ondc_provider_id" class="form-label">ONDC Provider ID *</label>
+                            {{ form.ondc_provider_id(class="form-control" + (" is-invalid" if form.ondc_provider_id.errors else "")) }}
+                            {% if form.ondc_provider_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ondc_provider_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Your provider ID for ONDC catalog</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="ondc_location_id" class="form-label">ONDC Location ID</label>
+                            {{ form.ondc_location_id(class="form-control" + (" is-invalid" if form.ondc_location_id.errors else "")) }}
+                            {% if form.ondc_location_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ondc_location_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Your store location ID in ONDC network</div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="text-muted mb-3">API Configuration</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-12 mb-3">
+                            <label for="ondc_api_url" class="form-label">ONDC API URL</label>
+                            {{ form.ondc_api_url(class="form-control" + (" is-invalid" if form.ondc_api_url.errors else "")) }}
+                            {% if form.ondc_api_url.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ondc_api_url.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">The base URL for ONDC API calls</div>
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            <label for="ondc_api_key" class="form-label">ONDC API Key</label>
+                            {{ form.ondc_api_key(class="form-control" + (" is-invalid" if form.ondc_api_key.errors else "")) }}
+                            {% if form.ondc_api_key.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ondc_api_key.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Secret API key for authenticating with ONDC</div>
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            <div class="form-check">
+                                {{ form.ondc_enabled(class="form-check-input" + (" is-invalid" if form.ondc_enabled.errors else "")) }}
+                                <label class="form-check-label" for="ondc_enabled">
+                                    Enable ONDC Integration
+                                </label>
+                                {% if form.ondc_enabled.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.ondc_enabled.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">When enabled, your products will be published to the ONDC network</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning mb-4">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                            </div>
+                            <div>
+                                <h6>Important Information</h6>
+                                <p class="mb-0">Make sure your product catalog is properly configured with ONDC-specific attributes before enabling ONDC integration. Products without proper ONDC categorization may not appear correctly in the network.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">ONDC Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border">
+                            <div class="card-body">
+                                <h6><i class="bi bi-box-seam text-primary me-2"></i> Catalog Sync</h6>
+                                <p class="small mb-3">Push your product catalog to the ONDC network. This will make your products visible to all ONDC-enabled buyer apps.</p>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-primary btn-sm" id="syncCatalogBtn" {% if not form.ondc_enabled.data %}disabled{% endif %}>
+                                        <i class="bi bi-cloud-upload"></i> Sync Catalog
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border">
+                            <div class="card-body">
+                                <h6><i class="bi bi-truck text-primary me-2"></i> Logistics Providers</h6>
+                                <p class="small mb-3">View and connect with available logistics providers on the ONDC network for shipping your orders.</p>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-primary btn-sm" id="logisticsProvidersBtn" {% if not form.ondc_enabled.data %}disabled{% endif %}>
+                                        <i class="bi bi-search"></i> View Providers
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border">
+                            <div class="card-body">
+                                <h6><i class="bi bi-graph-up text-primary me-2"></i> ONDC Performance</h6>
+                                <p class="small mb-3">View your sales and performance metrics across the ONDC network.</p>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-primary btn-sm" id="performanceBtn" {% if not form.ondc_enabled.data %}disabled{% endif %}>
+                                        <i class="bi bi-bar-chart"></i> View Analytics
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border">
+                            <div class="card-body">
+                                <h6><i class="bi bi-gear text-primary me-2"></i> Test Connection</h6>
+                                <p class="small mb-3">Test your connection to the ONDC network to ensure everything is working properly.</p>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-primary btn-sm" id="testConnectionBtn" {% if not form.ondc_enabled.data %}disabled{% endif %}>
+                                        <i class="bi bi-speedometer2"></i> Test Connection
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sync Catalog Modal -->
+<div class="modal fade" id="syncCatalogModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Catalog Sync</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-4" id="syncingMessage">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mb-0">Syncing your catalog with ONDC network...</p>
+                </div>
+                
+                <div class="d-none" id="syncSuccessMessage">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <div class="alert alert-success">
+                        <p class="mb-0">Your catalog has been successfully synced with the ONDC network.</p>
+                    </div>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Total Products
+                            <span class="badge bg-primary rounded-pill" id="totalProductsCount">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Successfully Synced
+                            <span class="badge bg-success rounded-pill" id="syncedProductsCount">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Failed to Sync
+                            <span class="badge bg-danger rounded-pill" id="failedProductsCount">0</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="d-none" id="syncErrorMessage">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-exclamation-circle text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <div class="alert alert-danger">
+                        <p class="mb-0">Failed to sync catalog with ONDC network. Please check your configuration and try again.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary d-none" id="viewDetailsBtn">View Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle sync catalog button
+        const syncCatalogBtn = document.getElementById('syncCatalogBtn');
+        if (syncCatalogBtn) {
+            syncCatalogBtn.addEventListener('click', function() {
+                const syncModal = new bootstrap.Modal(document.getElementById('syncCatalogModal'));
+                syncModal.show();
+                
+                // Simulate syncing process
+                setTimeout(function() {
+                    document.getElementById('syncingMessage').classList.add('d-none');
+                    document.getElementById('syncSuccessMessage').classList.remove('d-none');
+                    document.getElementById('viewDetailsBtn').classList.remove('d-none');
+                    
+                    // Update counts (these would come from the API in a real application)
+                    document.getElementById('totalProductsCount').textContent = '42';
+                    document.getElementById('syncedProductsCount').textContent = '39';
+                    document.getElementById('failedProductsCount').textContent = '3';
+                }, 2000);
+            });
+        }
+        
+        // Handle other buttons (these would be implemented with actual functionality in a real application)
+        const buttons = ['logisticsProvidersBtn', 'performanceBtn', 'testConnectionBtn'];
+        buttons.forEach(function(btnId) {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    alert('This feature is coming soon. Stay tuned!');
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

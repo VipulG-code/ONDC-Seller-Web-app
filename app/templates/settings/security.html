@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Security Settings - ONDC Seller App{% endblock %}
+
+{% block page_title %}Security Settings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Settings</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('settings.profile') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shop me-2"></i> Business Profile
+                    </a>
+                    <a href="{{ url_for('settings.security') }}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-shield-lock me-2"></i> Security
+                    </a>
+                    <a href="{{ url_for('settings.shipping') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-truck me-2"></i> Shipping
+                    </a>
+                    <a href="{{ url_for('settings.ondc') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-hdd-network me-2"></i> ONDC Integration
+                    </a>
+                    <a href="{{ url_for('settings.notifications') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-bell me-2"></i> Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Password & Security</h5>
+            </div>
+            <div class="card-body">
+                <!-- Change Password Form -->
+                <form method="POST" action="{{ url_for('settings.security') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <h6 class="text-muted mb-3">Change Password</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-12 mb-3">
+                            <label for="current_password" class="form-label">Current Password *</label>
+                            {{ form.current_password(class="form-control" + (" is-invalid" if form.current_password.errors else "")) }}
+                            {% if form.current_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.current_password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="new_password" class="form-label">New Password *</label>
+                            {{ form.new_password(class="form-control" + (" is-invalid" if form.new_password.errors else "")) }}
+                            {% if form.new_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.new_password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Password must be at least 8 characters long</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm_password" class="form-label">Confirm New Password *</label>
+                            {{ form.confirm_password(class="form-control" + (" is-invalid" if form.confirm_password.errors else "")) }}
+                            {% if form.confirm_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.confirm_password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <!-- Security Tips -->
+                <h6 class="text-muted mb-3">Security Tips</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border-0">
+                            <div class="card-body">
+                                <h6 class="mb-2"><i class="bi bi-shield-check text-success me-2"></i> Strong Password</h6>
+                                <p class="mb-0 small">Use a combination of letters, numbers, and special characters. Don't use easily guessable information.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border-0">
+                            <div class="card-body">
+                                <h6 class="mb-2"><i class="bi bi-shield-check text-success me-2"></i> Regular Updates</h6>
+                                <p class="mb-0 small">Change your password regularly, at least once every 3 months.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border-0">
+                            <div class="card-body">
+                                <h6 class="mb-2"><i class="bi bi-shield-check text-success me-2"></i> Unique Passwords</h6>
+                                <p class="mb-0 small">Use a different password for each of your important accounts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 bg-light border-0">
+                            <div class="card-body">
+                                <h6 class="mb-2"><i class="bi bi-shield-check text-success me-2"></i> Stay Alert</h6>
+                                <p class="mb-0 small">Watch for suspicious activity and report it immediately.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

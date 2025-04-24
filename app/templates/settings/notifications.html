@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Notification Preferences - ONDC Seller App{% endblock %}
+
+{% block page_title %}Notification Preferences{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Settings</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('settings.profile') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shop me-2"></i> Business Profile
+                    </a>
+                    <a href="{{ url_for('settings.security') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shield-lock me-2"></i> Security
+                    </a>
+                    <a href="{{ url_for('settings.shipping') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-truck me-2"></i> Shipping
+                    </a>
+                    <a href="{{ url_for('settings.ondc') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-hdd-network me-2"></i> ONDC Integration
+                    </a>
+                    <a href="{{ url_for('settings.notifications') }}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-bell me-2"></i> Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Notification Preferences</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('settings.notifications') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    
+                    <h6 class="text-muted mb-3">Notification Types</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="notify_new_order" name="notify_new_order" {% if settings.notify_new_order %}checked{% endif %}>
+                                        <label class="form-check-label" for="notify_new_order">
+                                            <i class="bi bi-bag text-primary me-2"></i> New Orders
+                                        </label>
+                                    </div>
+                                    <p class="form-text mb-0">Get notified when a new order is placed</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="notify_order_status" name="notify_order_status" {% if settings.notify_order_status %}checked{% endif %}>
+                                        <label class="form-check-label" for="notify_order_status">
+                                            <i class="bi bi-truck text-primary me-2"></i> Order Status Updates
+                                        </label>
+                                    </div>
+                                    <p class="form-text mb-0">Get notified when an order status changes</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="notify_low_stock" name="notify_low_stock" {% if settings.notify_low_stock %}checked{% endif %}>
+                                        <label class="form-check-label" for="notify_low_stock">
+                                            <i class="bi bi-exclamation-triangle text-warning me-2"></i> Low Stock Alerts
+                                        </label>
+                                    </div>
+                                    <p class="form-text mb-0">Get notified when product stock falls below threshold</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="notify_customer_message" name="notify_customer_message" {% if settings.notify_customer_message %}checked{% endif %}>
+                                        <label class="form-check-label" for="notify_customer_message">
+                                            <i class="bi bi-chat-dots text-primary me-2"></i> Customer Messages
+                                        </label>
+                                    </div>
+                                    <p class="form-text mb-0">Get notified when a customer sends a message</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="text-muted mb-3">Notification Channels</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="notify_email" name="notify_email" {% if settings.notify_email %}checked{% endif %}>
+                                        <label class="form-check-label" for="notify_email">
+                                            <i class="bi bi-envelope text-primary me-2"></i> Email Notifications
+                                        </label>
+                                    </div>
+                                    <p class="form-text mb-0">Receive notifications via email</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="notify_app" name="notify_app" {% if settings.notify_app %}checked{% endif %}>
+                                        <label class="form-check-label" for="notify_app">
+                                            <i class="bi bi-bell text-primary me-2"></i> In-App Notifications
+                                        </label>
+                                    </div>
+                                    <p class="form-text mb-0">Receive notifications within the app</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mb-4">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-info-circle-fill fs-4"></i>
+                            </div>
+                            <div>
+                                <h6>Notification Schedule</h6>
+                                <p class="mb-0">In-app notifications are delivered immediately. Email notifications may be batched and sent periodically to reduce email volume.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

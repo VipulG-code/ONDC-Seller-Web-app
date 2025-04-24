@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - ONDC Seller App{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Cards Row -->
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card stats-primary h-100">
+            <div class="stats-title">Total Orders</div>
+            <div class="stats-value">{{ total_orders }}</div>
+            <div class="stats-description">
+                <span class="text-primary"><i class="bi bi-bag"></i></span> Lifetime orders
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card stats-warning h-100">
+            <div class="stats-title">Pending Orders</div>
+            <div class="stats-value">{{ pending_orders }}</div>
+            <div class="stats-description">
+                <span class="text-warning"><i class="bi bi-clock"></i></span> Awaiting processing
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card stats-success h-100">
+            <div class="stats-title">Active Products</div>
+            <div class="stats-value">{{ active_products }}</div>
+            <div class="stats-description">
+                <span class="text-success"><i class="bi bi-box"></i></span> Out of {{ total_products }} total
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card stats-danger h-100">
+            <div class="stats-title">Low Stock Items</div>
+            <div class="stats-value">{{ low_stock_products|length }}</div>
+            <div class="stats-description">
+                <span class="text-danger"><i class="bi bi-exclamation-triangle"></i></span> Products below threshold
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sales Charts Row -->
+<div class="row">
+    <!-- Daily Sales Chart -->
+    <div class="col-xl-4 col-lg-6 mb-4">
+        <div class="chart-container h-100">
+            <div class="chart-title">Daily Sales (Last 7 Days)</div>
+            <div style="height: 250px;">
+                <canvas id="dailySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Weekly Sales Chart -->
+    <div class="col-xl-4 col-lg-6 mb-4">
+        <div class="chart-container h-100">
+            <div class="chart-title">Weekly Sales (Last 4 Weeks)</div>
+            <div style="height: 250px;">
+                <canvas id="weeklySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Monthly Sales Chart -->
+    <div class="col-xl-4 col-lg-12 mb-4">
+        <div class="chart-container h-100">
+            <div class="chart-title">Monthly Sales (Last 6 Months)</div>
+            <div style="height: 250px;">
+                <canvas id="monthlySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Orders and Low Stock Products Row -->
+<div class="row">
+    <!-- Recent Orders -->
+    <div class="col-lg-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Orders</h5>
+                <a href="{{ url_for('orders.list') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if recent_orders %}
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('orders.detail', id=order.id) }}">
+                                            {{ order.order_number }}
+                                        </a>
+                                    </td>
+                                    <td>{{ order.customer_name }}</td>
+                                    <td>₹{{ order.total_amount|round(2) }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ order.status }}">
+                                            {{ order.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ order.created_at.strftime('%d-%m-%Y') }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-3">No recent orders found.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Low Stock Products -->
+    <div class="col-lg-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Low Stock Products</h5>
+                <a href="{{ url_for('products.list') }}?status=low_stock" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Stock</th>
+                                <th>Threshold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if low_stock_products %}
+                                {% for product in low_stock_products %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('products.edit', id=product.id) }}">
+                                            {{ product.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ product.sku }}</td>
+                                    <td>
+                                        <span class="text-danger fw-bold">{{ product.stock_quantity }}</span>
+                                    </td>
+                                    <td>{{ product.low_stock_threshold }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-3">No low stock products found.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions Card -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{{ url_for('products.add') }}" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-plus-lg mb-2 d-block fs-4"></i>
+                            Add New Product
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{{ url_for('orders.list') }}?status=new" class="btn btn-outline-warning w-100 py-3">
+                            <i class="bi bi-list-check mb-2 d-block fs-4"></i>
+                            Process New Orders
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{{ url_for('settings.profile') }}" class="btn btn-outline-secondary w-100 py-3">
+                            <i class="bi bi-gear mb-2 d-block fs-4"></i>
+                            Business Settings
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{{ url_for('settings.ondc') }}" class="btn btn-outline-accent w-100 py-3">
+                            <i class="bi bi-cloud-upload mb-2 d-block fs-4"></i>
+                            ONDC Integration
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize sales charts
+        initDailySalesChart('dailySalesChart', {{ daily_sales|tojson }});
+        initWeeklySalesChart('weeklySalesChart', {{ weekly_sales|tojson }});
+        initMonthlySalesChart('monthlySalesChart', {{ monthly_sales|tojson }});
+    });
+</script>
+{% endblock %}

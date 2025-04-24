@@ -1,0 +1,444 @@
+{% extends "base.html" %}
+
+{% block title %}{% if product %}Edit{% else %}Add{% endif %} Product - ONDC Seller App{% endblock %}
+
+{% block page_title %}{% if product %}Edit{% else %}Add{% endif %} Product{% endblock %}
+
+{% block page_actions %}
+<div>
+    {% if product %}
+    <a href="{{ url_for('products.list') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Products
+    </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-light">
+        <ul class="nav nav-tabs card-header-tabs" id="productTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Info</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pricing-tab" data-bs-toggle="tab" data-bs-target="#pricing" type="button" role="tab" aria-controls="pricing" aria-selected="false">Pricing & Inventory</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab" aria-controls="images" aria-selected="false">Images</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="variants-tab" data-bs-toggle="tab" data-bs-target="#variants" type="button" role="tab" aria-controls="variants" aria-selected="false">Variants</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab" aria-controls="shipping" aria-selected="false">Shipping</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ondc-tab" data-bs-toggle="tab" data-bs-target="#ondc" type="button" role="tab" aria-controls="ondc" aria-selected="false">ONDC</button>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <div class="tab-content" id="productTabsContent">
+                <!-- Basic Info Tab -->
+                <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Product Name *</label>
+                            {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="sku" class="form-label">SKU (Stock Keeping Unit) *</label>
+                            {{ form.sku(class="form-control" + (" is-invalid" if form.sku.errors else "")) }}
+                            {% if form.sku.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.sku.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Must be unique for each product</div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <label for="short_description" class="form-label">Short Description</label>
+                            {{ form.short_description(class="form-control" + (" is-invalid" if form.short_description.errors else ""), rows=2) }}
+                            {% if form.short_description.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.short_description.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Brief summary displayed in product listings (max 500 characters)</div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <label for="description" class="form-label">Full Description</label>
+                            {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=6) }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="category_id" class="form-label">Category</label>
+                            {{ form.category_id(class="form-select" + (" is-invalid" if form.category_id.errors else "")) }}
+                            {% if form.category_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.category_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Status</label>
+                            {{ form.status(class="form-select" + (" is-invalid" if form.status.errors else "")) }}
+                            {% if form.status.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.status.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                {{ form.featured(class="form-check-input" + (" is-invalid" if form.featured.errors else "")) }}
+                                <label class="form-check-label" for="featured">
+                                    Featured Product
+                                </label>
+                                {% if form.featured.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.featured.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Featured products are highlighted in catalogs and search results</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pricing & Inventory Tab -->
+                <div class="tab-pane fade" id="pricing" role="tabpanel" aria-labelledby="pricing-tab">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="price" class="form-label">Selling Price *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                {{ form.price(class="form-control" + (" is-invalid" if form.price.errors else ""), type="number", step="0.01") }}
+                                {% if form.price.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.price.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-text">The price at which customers buy the product</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="mrp" class="form-label">MRP (Maximum Retail Price) *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                {{ form.mrp(class="form-control" + (" is-invalid" if form.mrp.errors else ""), type="number", step="0.01") }}
+                                {% if form.mrp.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.mrp.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-text">The printed price on the product</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="cost_price" class="form-label">Cost Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                {{ form.cost_price(class="form-control" + (" is-invalid" if form.cost_price.errors else ""), type="number", step="0.01") }}
+                                {% if form.cost_price.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.cost_price.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-text">Your cost to purchase or manufacture the product</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="tax_rate" class="form-label">Tax Rate (%)</label>
+                            <div class="input-group">
+                                {{ form.tax_rate(class="form-control" + (" is-invalid" if form.tax_rate.errors else ""), type="number", step="0.01") }}
+                                <span class="input-group-text">%</span>
+                                {% if form.tax_rate.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.tax_rate.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="stock_quantity" class="form-label">Stock Quantity</label>
+                            {{ form.stock_quantity(class="form-control" + (" is-invalid" if form.stock_quantity.errors else ""), type="number", min="0") }}
+                            {% if form.stock_quantity.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.stock_quantity.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="low_stock_threshold" class="form-label">Low Stock Alert Threshold</label>
+                            {{ form.low_stock_threshold(class="form-control" + (" is-invalid" if form.low_stock_threshold.errors else ""), type="number", min="0") }}
+                            {% if form.low_stock_threshold.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.low_stock_threshold.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">You'll receive alerts when stock falls below this level</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Images Tab -->
+                <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="images" class="form-label">Product Images</label>
+                            {{ form.images(class="form-control" + (" is-invalid" if form.images.errors else ""), multiple=True, accept="image/*") }}
+                            {% if form.images.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.images.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Select multiple images if needed. The first image will be used as the primary image.</div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div id="image-preview-container" class="row mt-3">
+                                {% if product and product.images %}
+                                    {% for image in product.images %}
+                                    <div class="col-md-3 col-sm-4 col-6 mb-3">
+                                        <div class="border rounded p-2 text-center">
+                                            <img src="{{ url_for('static', filename=image.image_path) }}" class="img-fluid mb-2" alt="{{ image.alt_text }}">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="small text-truncate">{{ image.image_path.split('/')[-1] }}</span>
+                                                {% if image.is_primary %}
+                                                <span class="badge bg-primary">Primary</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Variants Tab -->
+                <div class="tab-pane fade" id="variants" role="tabpanel" aria-labelledby="variants-tab">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Product Variants</h5>
+                        <button type="button" id="addVariantBtn" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-plus-lg"></i> Add Variant
+                        </button>
+                    </div>
+                    
+                    <div id="variantsContainer">
+                        {% if product and product.variants %}
+                            {% for variant in product.variants %}
+                            <div class="variant-row row border rounded p-3 mb-3">
+                                <div class="col-md-12 mb-2 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">Variant #{{ loop.index }}</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-variant">
+                                        <i class="bi bi-trash"></i> Remove
+                                    </button>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Variant Name</label>
+                                    <input type="text" class="form-control" name="variant_name_{{ loop.index }}" value="{{ variant.name }}" required>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">SKU</label>
+                                    <input type="text" class="form-control" name="variant_sku_{{ loop.index }}" value="{{ variant.sku }}" required>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Price</label>
+                                    <input type="number" step="0.01" class="form-control" name="variant_price_{{ loop.index }}" value="{{ variant.price }}" required>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Stock Quantity</label>
+                                    <input type="number" class="form-control" name="variant_stock_{{ loop.index }}" value="{{ variant.stock_quantity }}">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Attributes (e.g. "Color: Red, Size: XL")</label>
+                                    <input type="text" class="form-control" name="variant_attributes_{{ loop.index }}" value="{{ variant.attributes|tojson if variant.attributes else '' }}">
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-light border text-center">
+                                <p class="mb-0">No variants added yet. Use the "Add Variant" button to create variations of this product (e.g. different sizes, colors).</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Shipping Tab -->
+                <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="weight" class="form-label">Weight (kg)</label>
+                            {{ form.weight(class="form-control" + (" is-invalid" if form.weight.errors else ""), type="number", step="0.01") }}
+                            {% if form.weight.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.weight.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-text mb-2">Dimensions (cm)</div>
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">L</span>
+                                        {{ form.length(class="form-control" + (" is-invalid" if form.length.errors else ""), type="number", step="0.1", placeholder="Length") }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">W</span>
+                                        {{ form.width(class="form-control" + (" is-invalid" if form.width.errors else ""), type="number", step="0.1", placeholder="Width") }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">H</span>
+                                        {{ form.height(class="form-control" + (" is-invalid" if form.height.errors else ""), type="number", step="0.1", placeholder="Height") }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if form.length.errors or form.width.errors or form.height.errors %}
+                                <div class="text-danger small mt-1">
+                                    Please provide valid dimensions
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div class="alert alert-info small">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                Providing accurate weight and dimensions helps calculate shipping rates correctly.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ONDC Tab -->
+                <div class="tab-pane fade" id="ondc" role="tabpanel" aria-labelledby="ondc-tab">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="hsn_code" class="form-label">HSN Code</label>
+                            {{ form.hsn_code(class="form-control" + (" is-invalid" if form.hsn_code.errors else "")) }}
+                            {% if form.hsn_code.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.hsn_code.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Harmonized System Nomenclature code for the product</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="ondc_category" class="form-label">ONDC Category</label>
+                            {{ form.ondc_category(class="form-control" + (" is-invalid" if form.ondc_category.errors else "")) }}
+                            {% if form.ondc_category.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.ondc_category.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Standard category as per ONDC taxonomy</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="fulfillment_id" class="form-label">Fulfillment ID</label>
+                            {{ form.fulfillment_id(class="form-control" + (" is-invalid" if form.fulfillment_id.errors else "")) }}
+                            {% if form.fulfillment_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.fulfillment_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">ID used to identify fulfillment method for this product</div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div class="alert alert-light border">
+                                <h6 class="alert-heading"><i class="bi bi-info-circle me-2"></i>About ONDC Fields</h6>
+                                <p class="small mb-0">
+                                    These fields are required for proper integration with the Open Network for Digital Commerce (ONDC).
+                                    Filling them correctly will ensure your products are properly listed and discoverable on all ONDC-enabled platforms.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                <a href="{{ url_for('products.list') }}" class="btn btn-outline-secondary">Cancel</a>
+                
+                <div>
+                    {% if product %}
+                    <button type="submit" name="save_as_draft" class="btn btn-outline-primary me-2">Save as Draft</button>
+                    {% endif %}
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

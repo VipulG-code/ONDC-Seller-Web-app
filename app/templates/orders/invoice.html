@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Invoice #{{ order.order_number }} - ONDC Seller App{% endblock %}
+
+{% block page_title %}Invoice #{{ order.order_number }}{% endblock %}
+
+{% block page_actions %}
+<div>
+    <a href="{{ url_for('orders.detail', id=order.id) }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Order
+    </a>
+    <button class="btn btn-outline-primary ms-2" id="printInvoice">
+        <i class="bi bi-printer"></i> Print
+    </button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card" id="invoiceContent">
+    <div class="card-body p-4">
+        <!-- Invoice Header -->
+        <div class="row mb-4">
+            <div class="col-sm-6">
+                <h3 class="mb-3">INVOICE</h3>
+                <h6 class="text-muted mb-1">Invoice #{{ order.order_number }}</h6>
+                <p class="mb-1">Date: {{ order.created_at.strftime('%d %b, %Y') }}</p>
+                <p class="mb-1">Status: 
+                    <span class="status-badge status-{{ order.status }}">{{ order.status }}</span>
+                </p>
+                {% if order.ondc_order_id %}
+                <p class="mb-0">ONDC Order ID: {{ order.ondc_order_id }}</p>
+                {% endif %}
+            </div>
+            <div class="col-sm-6 text-sm-end">
+                <div class="mb-3">
+                    <h4 class="mb-1">{{ current_user.business_name }}</h4>
+                    <p class="mb-1">{{ current_user.address }}</p>
+                    <p class="mb-1">{{ current_user.city }}, {{ current_user.state }} {{ current_user.postal_code }}</p>
+                    <p class="mb-1">{{ current_user.country }}</p>
+                    <p class="mb-1">{{ current_user.email }}</p>
+                    <p class="mb-0">{{ current_user.phone }}</p>
+                    {% if current_user.tax_id %}
+                    <p class="mb-0">GST/Tax ID: {{ current_user.tax_id }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <!-- Customer Information -->
+            <div class="col-sm-6">
+                <h6 class="mb-3">BILL TO</h6>
+                <p class="mb-1">{{ order.customer_name }}</p>
+                <p class="mb-1">{{ order.customer_email }}</p>
+                <p class="mb-0">{{ order.customer_phone }}</p>
+            </div>
+            
+            <!-- Shipping Address -->
+            <div class="col-sm-6">
+                <h6 class="mb-3">SHIP TO</h6>
+                <p class="mb-1">{{ order.shipping_address }}</p>
+                <p class="mb-1">{{ order.shipping_city }}, {{ order.shipping_state }}</p>
+                <p class="mb-1">{{ order.shipping_postal_code }}, {{ order.shipping_country }}</p>
+                <p class="mb-0">Shipping Method: {{ order.shipping_method or 'Standard Shipping' }}</p>
+                {% if order.tracking_number %}
+                <p class="mb-0">Tracking: {{ order.tracking_number }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Order Items -->
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered">
+                <thead class="bg-light">
+                    <tr>
+                        <th width="50">No.</th>
+                        <th>Product</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-end">Quantity</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div>{{ item.product_name }}</div>
+                            <div class="text-muted small">{{ item.product_sku }}</div>
+                            {% if item.product_options %}
+                            <div class="text-muted small">
+                                {% for key, value in item.product_options.items() %}
+                                    {{ key }}: {{ value }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">₹{{ item.price|round(2) }}</td>
+                        <td class="text-end">{{ item.quantity }}</td>
+                        <td class="text-end">₹{{ item.total|round(2) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end">Subtotal:</td>
+                        <td class="text-end">₹{{ (order.total_amount - order.shipping_amount - order.tax_amount + order.discount_amount)|round(2) }}</td>
+                    </tr>
+                    {% if order.discount_amount > 0 %}
+                    <tr>
+                        <td colspan="4" class="text-end">Discount:</td>
+                        <td class="text-end">-₹{{ order.discount_amount|round(2) }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td colspan="4" class="text-end">Tax:</td>
+                        <td class="text-end">₹{{ order.tax_amount|round(2) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end">Shipping:</td>
+                        <td class="text-end">₹{{ order.shipping_amount|round(2) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Total:</td>
+                        <td class="text-end fw-bold">₹{{ order.total_amount|round(2) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <!-- Payment Information -->
+        <div class="row mb-4">
+            <div class="col-sm-6">
+                <h6 class="mb-3">PAYMENT INFORMATION</h6>
+                <p class="mb-1">Payment Method: {{ order.payment_method or 'Not specified' }}</p>
+                <p class="mb-1">Payment Status: 
+                    {% if order.payment_status == 'paid' %}
+                    <span class="badge bg-success">Paid</span>
+                    {% elif order.payment_status == 'refunded' %}
+                    <span class="badge bg-info">Refunded</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </p>
+                <p class="mb-0">Transaction Date: {{ order.created_at.strftime('%d %b, %Y') }}</p>
+            </div>
+        </div>
+        
+        <!-- Notes and Terms -->
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
+                <h6>NOTES</h6>
+                <p class="mb-0">Thank you for your business!</p>
+                
+                <div class="mt-4 pt-2">
+                    <p class="text-muted mb-1 small">Terms & Conditions:</p>
+                    <p class="text-muted mb-0 small">This is a computer-generated invoice. No signature required.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Print invoice functionality
+        document.getElementById('printInvoice').addEventListener('click', function() {
+            window.print();
+        });
+    });
+</script>
+{% endblock %}

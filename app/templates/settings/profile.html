@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Business Profile - ONDC Seller App{% endblock %}
+
+{% block page_title %}Business Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Settings</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('settings.profile') }}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-shop me-2"></i> Business Profile
+                    </a>
+                    <a href="{{ url_for('settings.security') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shield-lock me-2"></i> Security
+                    </a>
+                    <a href="{{ url_for('settings.shipping') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-truck me-2"></i> Shipping
+                    </a>
+                    <a href="{{ url_for('settings.ondc') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-hdd-network me-2"></i> ONDC Integration
+                    </a>
+                    <a href="{{ url_for('settings.notifications') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-bell me-2"></i> Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Business Profile Settings</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('settings.profile') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <h6 class="text-muted mb-3">Business Information</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="business_name" class="form-label">Business Name *</label>
+                            {{ form.business_name(class="form-control" + (" is-invalid" if form.business_name.errors else "")) }}
+                            {% if form.business_name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.business_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="owner_name" class="form-label">Owner Name *</label>
+                            {{ form.owner_name(class="form-control" + (" is-invalid" if form.owner_name.errors else "")) }}
+                            {% if form.owner_name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.owner_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else "")) }}
+                            {% if form.phone.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.phone.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="business_category" class="form-label">Business Category</label>
+                            {{ form.business_category(class="form-select" + (" is-invalid" if form.business_category.errors else "")) }}
+                            {% if form.business_category.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.business_category.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="tax_id" class="form-label">Tax ID / GST Number</label>
+                            {{ form.tax_id(class="form-control" + (" is-invalid" if form.tax_id.errors else "")) }}
+                            {% if form.tax_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.tax_id.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <h6 class="text-muted mb-3">Business Address</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-12 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            {{ form.address(class="form-control" + (" is-invalid" if form.address.errors else ""), rows=2) }}
+                            {% if form.address.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.address.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label">City</label>
+                            {{ form.city(class="form-control" + (" is-invalid" if form.city.errors else "")) }}
+                            {% if form.city.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.city.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="state" class="form-label">State</label>
+                            {{ form.state(class="form-control" + (" is-invalid" if form.state.errors else "")) }}
+                            {% if form.state.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.state.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="postal_code" class="form-label">Postal Code</label>
+                            {{ form.postal_code(class="form-control" + (" is-invalid" if form.postal_code.errors else "")) }}
+                            {% if form.postal_code.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.postal_code.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="country" class="form-label">Country</label>
+                            {{ form.country(class="form-control" + (" is-invalid" if form.country.errors else "")) }}
+                            {% if form.country.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.country.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
