@@ -13,10 +13,10 @@ class ProductForm(FlaskForm):
     short_description = TextAreaField('Short Description', validators=[Optional(), Length(max=500)])
     
     # Pricing
-    price = FloatField('Selling Price', validators=[DataRequired(), NumberRange(min=0)])
-    mrp = FloatField('MRP (Maximum Retail Price)', validators=[DataRequired(), NumberRange(min=0)])
-    cost_price = FloatField('Cost Price', validators=[Optional(), NumberRange(min=0)])
-    tax_rate = FloatField('Tax Rate (%)', validators=[Optional(), NumberRange(min=0, max=100)], default=0)
+    price = IntegerField('Selling Price', validators=[DataRequired(), NumberRange(min=0)])
+    mrp = IntegerField('MRP (Maximum Retail Price)', validators=[DataRequired(), NumberRange(min=0)])
+    cost_price = IntegerField('Cost Price', validators=[Optional(), NumberRange(min=0)])
+    tax_rate = IntegerField('Tax Rate (%)', validators=[Optional(), NumberRange(min=0, max=100)], default=0)
     
     # Inventory
     stock_quantity = IntegerField('Stock Quantity', validators=[Optional(), NumberRange(min=0)], default=0)
