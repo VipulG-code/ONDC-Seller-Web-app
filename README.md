@@ -12,14 +12,14 @@ A web-based application for sellers to manage their listings on the **Open Netwo
 - Modular Flask app structure
 - Image upload functionality (up to 16MB)
 
-## 🚀 Technologies Used
+## Technologies Used
 - **Python 3**
 - **Flask**
 - **SQLAlchemy**
 - **SQLite**
 - **Replit deployment support** (via `.replit` and `pyproject.toml`)
 
-## 🗂️ Project Structure
+## Project Structure
 ```
 ONDCSellerPlatform/
 ├── app.py                  # Entry point for creating Flask app
@@ -58,5 +58,5 @@ You can configure the app using environment variables or directly in config.py.
 ## Author
 Vipul Ghodake
 
-##📃 License
+## 📃 License
 This project is licensed under the MIT License. See LICENSE for details.
