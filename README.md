@@ -113,6 +113,3 @@ UPLOAD_FOLDER=app/static/uploads
 
 ## License
 MIT License - See [LICENSE](LICENSE) for details.
-
-## Support
-For issues, please [open a ticket](https://github.com/VipulG-code/ONDC-Seller-Web-app/issues).
