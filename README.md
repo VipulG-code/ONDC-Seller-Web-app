@@ -14,13 +14,13 @@ A Flask-based web platform for sellers to manage their ONDC (Open Network for Di
 - Modular Flask blueprints
 - Replit-ready deployment
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Backend**: Python 3, Flask
 - **Database**: SQLite, SQLAlchemy
 - **Templating**: Jinja2
 - **Deployment**: Replit
 
-## 📁 Project Structure
+## Project Structure
 ```
 ONDCSellerPlatform/
 ├── app/
@@ -43,7 +43,7 @@ ONDCSellerPlatform/
 └── .replit                 # Replit config
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.9+
@@ -101,24 +101,20 @@ MAX_CONTENT_LENGTH=16777216  # 16MB
 UPLOAD_FOLDER=app/static/uploads
 ```
 
-## 🔒 Authentication Workflow
+## Authentication Workflow
 1. Seller registers with email/password
 2. System creates hashed password using werkzeug
 3. Session cookie created upon login
 4. Middleware validates session for protected routes
 
-## 📸 Image Uploads
+## Image Uploads
 - Accepts JPEG/PNG formats
 - Stored in `app/static/uploads`
 - File size limit: 16MB
 - Filenames hashed for security
 
-## 📄 License
+## License
 MIT License - See [LICENSE](LICENSE) for details.
 
-## 🙋 Support
+## Support
 For issues, please [open a ticket](https://github.com/VipulG-code/ONDC-Seller-Web-app/issues).
-
-
-**Maintained by Vipul Ghodake** • [Contribute](https://github.com/VipulG-code/ONDC-Seller-Web-app/pulls)
-```
