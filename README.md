@@ -2,8 +2,6 @@
 
 A Flask-based web platform for sellers to manage their ONDC (Open Network for Digital Commerce) product listings. Features seller onboarding, product management, and secure database operations.
 
-[![GitHub License](https://img.shields.io/github/license/VipulG-code/ONDC-Seller-Web-app)](https://github.com/VipulG-code/ONDC-Seller-Web-app/blob/main/LICENSE)
-
 ## 🌟 Features
 - Seller registration & authentication
 - Product management (CRUD operations)
