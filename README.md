@@ -119,44 +119,6 @@ MIT License - See [LICENSE](LICENSE) for details.
 ## 🙋 Support
 For issues, please [open a ticket](https://github.com/VipulG-code/ONDC-Seller-Web-app/issues).
 
----
 
 **Maintained by Vipul Ghodake** • [Contribute](https://github.com/VipulG-code/ONDC-Seller-Web-app/pulls)
-```
-
-Key improvements made:
-1. Added proper project structure based on Flask blueprints
-2. Included database initialization command
-3. Added authentication workflow details
-4. Fixed environment setup instructions
-5. Added Replit deployment notes
-6. Included security measures for file uploads
-7. Added license badge and support section
-8. Organized features into logical groups
-9. Added proper Python version requirement
-10. Included database initialization step
-
-To implement this properly, ensure you have these actual files/directories in your project:
-1. Create `requirements.txt` with:
-```
-flask
-python-dotenv
-werkzeug
-sqlalchemy
-```
-
-2. Add database initialization command in your Flask app:
-```python
-@app.cli.command("init-db")
-def init_db():
-    from .models import db
-    db.create_all()
-    print("Database initialized!")
-```
-
-3. Create `.env.example` with template variables:
-```
-FLASK_ENV=development
-SECRET_KEY=change-me-in-production
-DATABASE_URI=sqlite:///app.db
 ```
