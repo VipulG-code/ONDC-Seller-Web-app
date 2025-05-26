@@ -52,7 +52,7 @@ Run the App
 python main.py
 The server will run on http://0.0.0.0:5000.
 
-##🛡️ Configuration
+## 🛡️ Configuration
 You can configure the app using environment variables or directly in config.py.
 
 ## Author
