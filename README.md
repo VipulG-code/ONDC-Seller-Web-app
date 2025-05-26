@@ -35,44 +35,31 @@ ONDCSellerPlatform/
 └── /app/                   # Application package
 ```
 
-🧪 Getting Started
+## 🧪 Getting Started
 Follow these steps to set up and run the ONDC Seller Web App on your local machine:
 
-🔁 1. Clone the Repository
-bash
-Copy
+1. Clone the Repository
 Edit
 git clone https://github.com/VipulG-code/ONDC-Seller-Web-app.git
 cd ONDC-Seller-Web-app
-🧱 2. Create and Activate a Virtual Environment (Recommended)
+2. Create and Activate a Virtual Environment (Recommended)
 For Linux/macOS:
-
-bash
-Copy
 Edit
 python3 -m venv venv
 source venv/bin/activate
 For Windows:
-
-bash
-Copy
 Edit
 python -m venv venv
 venv\Scripts\activate
-📦 3. Install the Required Dependencies
+3. Install the Required Dependencies
 bash
 Copy
 Edit
 pip install -r requirements.txt
-▶️ 4. Run the Application
-bash
-Copy
+4. Run the Application
 Edit
 python main.py
 Once running, open your browser and navigate to:
-
-cpp
-Copy
 Edit
 http://0.0.0.0:5000
 
