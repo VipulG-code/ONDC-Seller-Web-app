@@ -5,12 +5,12 @@ A web-based application for sellers to manage their listings on the **Open Netwo
 [GitHub Repository Link](https://github.com/VipulG-code/ONDC-Seller-Web-app)
 
 ## 📌 Features
-- 🧾 Seller account setup and session management
-- 📦 Product listings and uploads
-- 🗃️ SQLite-based database with SQLAlchemy ORM
-- 🛡️ Secure configuration with environment variable support
-- 🛠️ Modular Flask app structure
-- 🖼️ Image upload functionality (up to 16MB)
+- Seller account setup and session management
+- Product listings and uploads
+- SQLite-based database with SQLAlchemy ORM
+- Secure configuration with environment variable support
+- Modular Flask app structure
+- Image upload functionality (up to 16MB)
 
 ## 🚀 Technologies Used
 - **Python 3**
@@ -52,11 +52,11 @@ Run the App
 python main.py
 The server will run on http://0.0.0.0:5000.
 
-🛡️ Configuration
+##🛡️ Configuration
 You can configure the app using environment variables or directly in config.py.
 
-Author
+## Author
 Vipul Ghodake
 
-📃 License
+##📃 License
 This project is licensed under the MIT License. See LICENSE for details.
