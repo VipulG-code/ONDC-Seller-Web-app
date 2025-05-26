@@ -1,6 +1,3 @@
-Here's a refined and corrected version of your README with proper structure and setup instructions:
-
-```markdown
 # 🛍️ ONDC Seller Web Application
 
 A Flask-based web platform for sellers to manage their ONDC (Open Network for Digital Commerce) product listings. Features seller onboarding, product management, and secure database operations.
